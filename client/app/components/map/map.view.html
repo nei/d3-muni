@@ -1,0 +1,58 @@
+<div id="map-view">
+    
+    <div id="tooltip">
+        just a tooltip
+    </div>
+
+    <div class="row">
+        <div class="col-sm-9" id="chart-area">
+        </div>
+        <div class="col-sm-3 standard-text" id="map-text">
+
+            <form class="form-inline">
+                
+                <div class="form-group">
+                    <p id="lesser-title">Choose the route</p>
+                <p id="sub-title">Select the route to see the buses</p>
+
+                    <!-- <input data-ng-model="vm.userDate1" type="text" class="form-control" id="date1" placeholder="1962"> -->
+                    <span class="route" ng-repeat="route in vm.routes">
+                    <label class="badge r-{{route.tag}}" for="r-{{route.tag}}">
+                      <input
+                        type="checkbox"
+                        id="r-{{route.tag}}"
+                        name="selectedRoutes[]"
+                        value="{{route.tag}}"
+                        title="{{route.title}}"
+                        ng-click="vm.toggleSelection(route)"
+                      > {{route.tag}}
+                    </label></span>
+
+                </div>
+
+                <hr>
+
+                <div class="form-group">
+
+                    <p id="lesser-title">Choose the direction</p>
+                    <p id="sub-title">Select the direction of the route</p>
+
+                    <span ng-repeat="(key, dir) in vm.directions">
+                    <label class="radio-inline">
+                        <input 
+                            type="radio" 
+                            id="dir-{{dir}}" 
+                            name="direction" value="{{key}}"
+                            ng-model="vm.directionSelected"> 
+                        {{dir}}
+                      </label>
+                    </span>
+                      
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+

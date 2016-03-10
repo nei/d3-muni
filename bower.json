@@ -1,0 +1,16 @@
+{
+  "name": "d3-test",
+  "version": "0.0.1",
+  "dependencies": {
+    "bootstrap": "latest",
+    "font-awesome": "latest",
+    "angular": "latest",
+    "angular-route": "latest",
+    "angular-resource": "latest",
+    "jquery": "latest",
+    "d3": "latest",
+    "angular-xml2json": "^0.0.2",
+    "angular-underscore-module": "^1.0.3",
+    "jquery.xml2json": "^1.3.0"
+  }
+}

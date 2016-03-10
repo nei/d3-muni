@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+<html lang="en-US">
+
+<head>
+    <meta charset="UTF-8">
+    <title>D3.js</title>
+
+    <!-- load styles -->
+    <link rel="stylesheet" type="text/css" href="assets/libs/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.min.css">
+
+    <!-- load angular -->
+    <script type="text/javascript" src="assets/libs/angular/angular.js"></script>
+    <script type="text/javascript" src="assets/libs/angular-route/angular-route.min.js"></script>
+    <script type="text/javascript" src="assets/libs/angular-resource/angular-resource.min.js"></script>
+</head>
+
+<!-- define our angular app -->
+<body data-ng-app="app">
+    <!-- Nav -->
+    <div>
+        <nav class="navbar navbar-default">
+          <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="/">San Francisco's Bus System Map</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+              <ul class="nav navbar-nav navbar-right">
+                <li><a href="/map">Map </a></li>
+              </ul>
+            </div><!-- /.navbar-collapse -->
+          </div><!-- /.container-fluid -->
+        </nav>
+    </div>
+
+    <!-- angular views load here -->
+    <div data-ng-view></div>
+
+    <!-- external scripts & d3 -->
+    <script type="text/javascript" src="assets/libs/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="assets/libs/jquery.xml2json/src/jquery.xml2json.js"></script>
+    <script type="text/javascript" src="assets/libs/bootstrap/dist/js/bootstrap.js"></script>
+    <script type="text/javascript" src="assets/libs/d3/d3.js"></script>
+    <script type="text/javascript" src="assets/libs/underscore/underscore.js"></script>
+
+    <!-- core angular module -->
+    <script type="text/javascript" src="app/app.module.js"></script>
+    <script type="text/javascript" src="app/app.routes.js"></script>
+
+    <!-- map module -->
+    <script type="text/javascript" src="app/components/map/map.module.js"></script>
+    <script type="text/javascript" src="app/components/map/map.controller.js"></script>
+
+    <!-- d3 module -->
+    <script type="text/javascript" src="app/components/d3/d3.module.js"></script>
+    <script type="text/javascript" src="app/components/d3/load-d3.service.js"></script>
+    <script type="text/javascript" src="app/components/d3/draw-graph.service.js"></script>
+
+    <!-- nextbus module -->
+    <script type="text/javascript" src="app/components/nextbus/nextbus.module.js"></script>
+    <script type="text/javascript" src="app/components/nextbus/nextbus.service.js"></script>
+</body>
+
+</html>
+

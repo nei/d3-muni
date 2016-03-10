@@ -1,0 +1,177 @@
+/* STANDARD COLORS */
+/*******
+MAP STYLES
+*******/
+.ocean {
+  fill: #baddff;
+}
+
+.land {
+  fill: #ebded4;
+}
+
+.neighborhood {
+  fill: #ebded4;
+}
+
+.neighborhood-label {
+  text-anchor: middle;
+  font-size: 0.7em;
+  font-family: sans-serif;
+  fill: #9e906f;
+  opacity: 0.8;
+}
+
+.artery-path {
+  fill: #ccc;
+  stroke: #fff;
+  stroke-width: 1.2px;
+}
+
+.street-path {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 0.2px;
+}
+
+.freeway-path {
+  stroke: #f9a542;
+  fill: none;
+  stroke-width: 1px;
+}
+
+/******
+general 
+*******/
+.route label input {
+  display: none;
+}
+
+/*************************************************
+MAP VIEW
+*************************************************/
+path {
+  stroke: steelblue;
+  stroke-width: 0.3;
+  fill: none;
+}
+
+svg text {
+  font-family: "Helvetica", "Sans-Serif";
+  color: #555;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: grey;
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+.svg-container {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;
+  /* aspect ratio */
+  height: 100%;
+  vertical-align: top;
+  overflow: hidden;
+  background-color: #baddff;
+}
+
+.svg-content-responsive {
+  display: inline-block;
+  position: absolute;
+  top: 10px;
+  left: 0;
+}
+
+#map-text {
+  margin-top: 20px;
+}
+
+.form-inline {
+  margin-bottom: 20px;
+}
+
+#date1,
+#date2 {
+  width: 100px;
+  border-radius: 0px;
+  margin-top: 10px;
+}
+
+/* this is the popup on graph bar hover */
+#tooltip {
+  position: absolute;
+  width: 200px;
+  height: auto;
+  padding: 10px;
+  background-color: white;
+  pointer-events: none;
+}
+#tooltiphidden {
+  display: none;
+}
+#tooltip p {
+  margin: 0;
+  font-family: sans-serif;
+  font-size: 16px;
+  line-height: 20px;
+}
+
+#year {
+  font-weight: 600;
+  font-family: "Helvetica", "Sans-Serif";
+  font-size: 16px;
+}
+
+#value {
+  font-weight: 300;
+  font-family: "Helvetica", "Sans-Serif";
+  font-size: 12px;
+}
+
+#popup-title {
+  font-style: italic;
+  font-weight: 200;
+  font-family: "Helvetica", "Sans-Serif";
+}
+
+#lesser-title {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+#sub-title {
+  font-style: italic;
+}
+
+#gen-button {
+  border: 1px solid #5AA67E;
+  background-color: transparent;
+  color: #5AA67E;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+#gen-button:hover {
+  border-color: #8AE3B5;
+  background-color: #8AE3B5;
+  color: white;
+}
+
+#reset-button {
+  border: 1px solid #B85878;
+  background-color: transparent;
+  color: #B85878;
+  margin-top: 10px;
+}
+#reset-button:hover {
+  border-color: #EB7FA3;
+  background-color: #EB7FA3;
+  color: white;
+}
+
+/*# sourceMappingURL=style.css.map */

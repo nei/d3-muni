@@ -1,0 +1,53 @@
+
+
+
+<div id="demo-view">
+    <div class="page-header">
+        <h1>U.S. GDP <small>1947 - Present</small></h1>
+    </div>
+
+    <!-- this is the popup that will display when user hovers over graph bar -->
+    <div id="tooltip">
+        <span id="alfabet" style='line-height:3em; font:2em sans-serif;'></span>
+        <p><span id="year">1947</span></p>
+        <p id="popup-title">U.S. GDP (billions USD)</p>
+        <p><span id="value">100</span></p>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6" id="chart-area">
+
+        </div>
+        <div class="col-sm-6 standard-text" id="demo-text">
+
+            <p id="lesser-title">U.S. GDP data is available from 1947 to 2014</p>
+            <p id="sub-title">Enter two dates below to graph the GDP for a range of your choice</p>
+
+            <hr>
+
+            <form class="form-inline">
+                <div class="form-group">
+                    <input data-ng-model="vm.userDate1" type="text" class="form-control" id="date1" placeholder="1962">
+                </div>
+
+                <div class="form-group">
+                    <input data-ng-model="vm.userDate2" type="text" class="form-control" id="date2" placeholder="1976">
+                </div>
+
+                <button data-ng-click="vm.generateGraph()" type="submit" class="btn" id="gen-button">Go!</button>
+                <button data-ng-click="vm.resetGraph()" type="submit" class="btn" id="reset-button">Reset Graph</button>
+            </form>
+
+            <hr>
+
+            <p>The graph at left is generated dynamically using the D3 Javascript library.</p>
+
+            <p>Each time you change the date range, an API call is made to the Qandle server and your requested data is returned. D3 dynamically renders the new data, scaling the axes, bar widths and heights.</p>
+
+            <p>Try it out!</p>
+        </div>
+    </div>
+
+</div>
+
+
