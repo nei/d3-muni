@@ -2,9 +2,8 @@
   'use strict';
 
   angular.module('app.nextbus')
-    .factory('nextbus', ['$http', '$q', 'xml2json', function($http, $q, xml2json) {
+    .factory('nextbus', ['$http', '$q', 'xml2json', '$interval', function($http, $q, xml2json, $interval) {
 
-    	var deferred = $q.defer();
     	var endpoint = 'http://webservices.nextbus.com/service/publicXMLFeed';
 	    var agency = 'sf-muni';
 	    var busTimer = [];
@@ -12,6 +11,7 @@
 	    var directions = {0:'Inbound',1:'Outbound'};
 
 	    var getRouteList = function () {
+	    	var deferred = $q.defer();
 	        $http({
 	             url: endpoint + '?command=routeList&a='+agency,
 	             method: 'GET',
@@ -26,6 +26,7 @@
 	    };
 
 	    var getRouteConfig = function () {
+	    	var deferred = $q.defer();
 	        $http({
 	             url: endpoint + '?command=routeConfig&a='+agency,
 	             method: 'GET',
@@ -85,7 +86,8 @@
 	        });
 	    };
 
-	    var vehicleLocations = function (route, direction, callback) {
+	    var getVehicleLocations = function (route, direction) {
+	    	var deferred = $q.defer();
 
 	        var t = (busTimer[route]) ? busTimer[route] : 0;
 	        var dir = ( direction === 0 )?'I':'O';
@@ -93,43 +95,77 @@
 	            routeBuses[route] = {};
 	        }
 
-	        $.ajax({
+	        $http({
 	            url: endpoint+'?command=vehicleLocations&a='+agency+'&r='+route+'&t='+t,
 	            dataType: 'xml',
-	            success: function(response) {
-	                var data = $.xml2json(response);
-	                busTimer[route] = data.lastTime.time;
+	            method: 'GET',
+	            cache: false
+	        }).then(function(response) {
+                var data = xml2json(response.data);
+                busTimer[route] = data.lastTime.time;
 
-	                 _.each(data.vehicle, function(n){
-	                    if(n.id>0){
-	                        var busOb = {
-	                            id: n.id,
-	                            lat: n.lat,
-	                            lon: n.lon,
-	                            routeTag: n.routeTag,
-	                            dirTag: n.dirTag,
-	                            speedKmHr: n.speedKmHr                                
-	                        };
-	                        routeBuses[route][n.id] = busOb;
-	                    }
-	                });
+                 _.each(data.vehicle, function(n){
+                    if(n.id>0){
+                        routeBuses[route][n.id] = n;
+                    }
+                });
 
-	                // lets plot just the buses that are on the right direction
-	                var re = /[_]+(.)_.*/;
-	                var filteredBuses = _.filter(routeBuses[route], function(b){
-	                    var testDir = re.exec(b.dirTag);
-	                    return (testDir !== null && testDir[1] === dir);
-	                });
-	                callback(null, filteredBuses);
-	            }
-	        });
+                // lets plot just the buses that are on the right direction
+                var re = /[_]+(.)_.*/;
+                var filteredBuses = _.filter(routeBuses[route], function(b){
+                    var testDir = re.exec(b.dirTag);
+                    return (testDir !== null && testDir[1] === dir);
+                });
+
+                filteredBuses = _.indexBy(filteredBuses, 'id');
+
+                return deferred.resolve(filteredBuses);
+            }, function errorCallback(response) {
+			    deferred.reject(response);
+			});
+
+	        return deferred.promise;
+	    };
+
+	    // check the hash of timers and return the routes that needs update
+	    var checkUpdate = function (routes, time) {
+	    	var updates = [];
+	    	var inter = _.intersection(routes, _.keys(busTimer));
+	    	_.each(inter, function(t){
+
+    			var last = busTimer[t];
+        		var now = new Date().getTime();
+        		var diff = (now-last)/1000;
+
+        		if( diff > 13){
+        			updates.push(t);
+        		}
+            });
+            return updates;
+	    };
+
+	    // return the min timer
+	    var getTimers = function (time) {
+	    	var time = time || 15;
+	    	var timers = [];
+	    	_.each(_.keys(busTimer), function(last){
+
+        		var now = new Date().getTime();
+        		var diff = (now-busTimer[last])/1000;
+
+        		timers.push(diff);
+            });
+
+            return (timers.length) ? (time-_.min(timers)) : 0;
 	    };
 
 	    return {
 	        getRouteList: getRouteList,
 	        getRouteConfig: getRouteConfig,
 	        messages: messages,
-	        vehicleLocations: vehicleLocations
+	        getVehicleLocations: getVehicleLocations,
+	        checkUpdate: checkUpdate,
+	        getTimers: getTimers
 	    };
 
     }]);

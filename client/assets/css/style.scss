@@ -58,6 +58,22 @@ MAP STYLES
     stroke-width: 1px;
 }
 
+.route-path {
+    fill: none;
+    stroke-width: 0.2em;
+    stroke-linejoin: round;
+}
+
+.circle-bus {
+    stroke-width: 0.8px;
+    opacity: 0.9;
+}
+
+.circle-busstop {
+    stroke-width: 1px;
+    opacity: 1;
+}
+
 /******
 general 
 *******/
@@ -66,6 +82,25 @@ general
     display: none;
 }
 
+
+div.tooltip {   
+    position: absolute;     
+    opacity: 0;    
+    text-align: left;         
+    min-width: 120px;
+    min-height: 40px;                   
+    padding: 5px;               
+    font: 11px sans-serif;      
+    background: lightsteelblue; 
+    border: 0px;        
+    border-radius: 8px;         
+    pointer-events: none;     
+
+    &.bus {
+        background: yellow; 
+    }
+      
+}
 
 /*************************************************
 MAP VIEW
@@ -114,46 +149,6 @@ svg text {
 
 .form-inline {
     margin-bottom: 20px;
-}
-
-#date1,
-#date2 {
-    width: 100px;
-    border-radius: 0px;
-    margin-top: 10px;
-}
-
-/* this is the popup on graph bar hover */
-#tooltip {
-    position: absolute;
-    width: 200px;
-    height: auto;
-    padding: 10px;
-    background-color: white;
-    pointer-events: none;
-
-    &hidden {
-        display: none;
-    }
-
-    p {
-        margin: 0;
-        font-family: sans-serif;
-        font-size: 16px;
-        line-height: 20px;
-    }
-}
-
-#year {
-    font-weight: 600;
-    font-family: $primaryFont;
-    font-size: 16px;
-}
-
-#value {
-    font-weight: 300;
-    font-family: $primaryFont;
-    font-size: 12px;
 }
 
 #popup-title {

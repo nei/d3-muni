@@ -6,20 +6,22 @@
         .module('app.map')
         .controller('MapController', MapController);
 
-    MapController.$inject = [ '$scope', '$http', 'd3', 'nextbus', 'drawGraph'];
+    MapController.$inject = [ '$scope', '$http', 'd3', 'nextbus', 'picasso', '$interval'];
 
-    function MapController($scope, $http, d3, nextbus, drawGraph) {
+    function MapController($scope, $http, d3, nextbus, picasso, $interval) {
 
         var vm = this;
+
+        var dataset;
 
         vm.routes = [];
         vm.routesSelected = [];
         vm.directions = {0:'Inbound', 1:'Outbound'};
         vm.directionSelected = 0;
+        vm.timer = 15;
 
         // functions called from buttons 
         vm.chooseRoute = chooseRoute;
-        vm.resetGraph = resetGraph;
         vm.toggleSelection = toggleSelection;
 
         // function call upon controller instantiation
@@ -32,7 +34,8 @@
 
             $http.get("/assets/json/all.json")
                 .success(function(data, status, headers, config) {
-                    drawGraph(data);
+                    dataset = data;
+                    picasso.drawBaseMap(dataset);
                 })
                 .error(function(data) {
                     console.log("API Error");
@@ -46,53 +49,75 @@
 
             nextbus.getRouteConfig()
                 .then(function(data){
-                    console.log(data)
+                    // copy the color to routeList
+                    _.each(data, function(d){
+                        _.extend(vm.routes[d.tag], {color: d.color});
+                        _.defaults(data[d.tag], {selected: false});
+                    });
+                    dataset.routes = data;
+                    dataset.buses = {};
                 });
 
+            $interval(function() {
+
+                vm.timer = Math.floor(nextbus.getTimers() );
+
+                // get the route codes
+                if( vm.timer <= 1){
+                    var updates = nextbus.checkUpdate(getRouteTags(vm.routesSelected));
+                            
+                    _.each(updates, function(r){
+                        chooseRoute(r);
+                    });
+                }
+
+            }, 900);
         };
 
-        $scope.$watch('vm.directionSelected', function() {
-            console.log('vm.directionSelected updated!', vm.directionSelected);
+        $scope.$watch('vm.directionSelected', function(newValue, oldValue) {
+            if(newValue && dataset){
+                picasso.drawRoutes(dataset, vm.directionSelected);
+            }
         });
 
         $scope.$watchCollection('vm.routesSelected', function(newValue, oldValue) {
-            console.log('vm.routesSelected updated!', vm.routesSelected, newValue, oldValue);
+            if(vm.routesSelected.length){
+
+                // array to check which tags is selected
+                var tagsSelected = getRouteTags(newValue);
+                var tagsToLoad = _.difference(tagsSelected, getRouteTags(oldValue));
+
+                // keep the atribute selected (bool) updated
+                dataset.routes = _.mapObject(dataset.routes, function(obj, key) {
+                    obj.selected = _.contains(tagsSelected, key) ? true : false;
+                    return obj;
+                });
+
+                chooseRoute(tagsToLoad[0]);
+            }
         });
 
-        function chooseRoute() {
+        function getRouteTags(dataset){
+            // array to check which tags is selected
+            var tags = [];
+            _.each(dataset, function(r){
+                tags.push(r.tag);
+            });
+            return tags;
+        }
+
+        function chooseRoute(routes) {
 
             // get the route codes
-            nextbus.getRouteConfig().then(function(data){
-                //vm.routes = data;
+            nextbus
+                .getVehicleLocations(routes, vm.directionSelected)
+                .then(function(data){
+                    
+                    dataset.buses = _.extend(dataset.buses, data);
 
-                // remove the existing graph and replace it
-                d3.select("div.svg-container").remove();
-
-                // redraw graph with new data
-                drawGraph(data);
-            });
-
-        };
-
-        // this resets the graph to the defaults
-        function resetGraph() {
-            $http.get("/assets/json/all.json")
-                .success(function(data, status, headers, config) {
-
-                    // clear text input boxes
-                    vm.routesSelected = [];
-                    vm.direction = 0;
-
-                    // remove the existing graph and replace it
-                    d3.select("div.svg-container").remove();
-
-                    // redraw graph with full data set
-                    drawGraph(data);
-                })
-                // end $http.get request
-                .error(function(data) {
-                    console.log("API Error");
+                    picasso.drawRoutes(dataset, vm.directionSelected);
                 });
+
         };
 
         function toggleSelection(route) {
@@ -100,12 +125,10 @@
 
             // is currently selected
             if (idx > -1) {
-                console.log('toggleSelection remove '+route.tag)
               vm.routesSelected.splice(idx, 1);
             }
             // is newly selected
             else {
-                console.log('toggleSelection add '+route.tag)
               vm.routesSelected.push(route);
             }
         };

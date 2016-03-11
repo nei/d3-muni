@@ -1,9 +1,5 @@
 <div id="map-view">
     
-    <div id="tooltip">
-        just a tooltip
-    </div>
-
     <div class="row">
         <div class="col-sm-9" id="chart-area">
         </div>
@@ -11,13 +7,19 @@
 
             <form class="form-inline">
                 
+                <div class="form-group" ng-show="vm.routesSelected.length">
+                    <span>Next update in {{vm.timer}} sec.</span>
+                </div>
+                
+                <hr>
+                
                 <div class="form-group">
                     <p id="lesser-title">Choose the route</p>
                 <p id="sub-title">Select the route to see the buses</p>
 
                     <!-- <input data-ng-model="vm.userDate1" type="text" class="form-control" id="date1" placeholder="1962"> -->
                     <span class="route" ng-repeat="route in vm.routes">
-                    <label class="badge r-{{route.tag}}" for="r-{{route.tag}}">
+                    <label class="badge r-{{route.tag}}" style="background-color: #{{route.color}}" for="r-{{route.tag}}">
                       <input
                         type="checkbox"
                         id="r-{{route.tag}}"
