@@ -8,7 +8,7 @@
         // Set dimensions of SVG element
         var map = {
             margin: { top: 30, right: 20, bottom: 50, left: 50 },
-            sizes: {w: 760, h:600},
+            sizes: {w: 800, h:600},
             center: [-122.5593367082541, 37.613752052748055],// centroid of neighborhoods
             scale: 259000
         };
@@ -34,9 +34,22 @@
             projection: projection,
             tooltip: tooltip,
             drawBaseMap: drawBaseMap,
+            drawStreets: drawStreets,
             drawRoutes: drawRoutes
         };
     }]);
+
+function drawStreets(streets) {
+    //jshint validthis:true
+    var path = this.path;
+    d3.select('#base > g.streets')
+        .append('g').attr('id', 'streets')
+        .selectAll('.street-path')
+        .data(streets.features)
+        .enter().append('svg:path')
+        .attr('class', 'street-path')
+        .attr('d', path);
+}
 
 function drawBaseMap(dataset) {
 
@@ -50,13 +63,17 @@ function drawBaseMap(dataset) {
         .append('div')
         .classed('svg-container', true)
         .append('svg')
-            // .attr('preserveAspectRatio', 'xMidYMid')
-            // .attr('viewBox', '0 0 ' + Math.max(width, height) + ' ' + Math.min(width, height))
-            // .classed('svg-content-responsive', true)
-            .attr('width', width)
-            .attr('height', height);
+             .attr('preserveAspectRatio', 'xMidYMid')
+            .attr('viewBox', '0 0 ' + Math.max(width, height) + ' ' + Math.min(width, height))
+            .classed('svg-content-responsive', false)
+            .attr('width', '100%')
+            .attr('height', '100%');
 
-    var baseGroup = canvas.append('g').attr('id', 'base');
+    var baseGroup = canvas.append('g')
+                        .attr('id', 'base');
+
+    // we want to lazy load streets and render it behind the arteries 
+    baseGroup.append('g').attr('class', 'streets');
     
     // create a group for each type of element to avoid overlap
     canvas.append('g').attr('id', 'route');
@@ -69,15 +86,6 @@ function drawBaseMap(dataset) {
         .enter().append('path')
         .attr('class', 'neighborhood land')
         .attr('d', path);
-
-    baseGroup
-        .append('g').attr('id', 'streets')
-        .selectAll('.street-path')
-        .data(dataset.streets.features)
-        .enter().append('svg:path')
-        .attr('class', 'street-path')
-        .attr('d', path);
-    
 
     baseGroup
         .selectAll('.artery-path')

@@ -23,7 +23,21 @@ MAP STYLES
 *******/
 
 body { padding: 10px;}
-#map-view {max-width: 1024px;}
+
+#chart-area {background-color:$ocean;}
+
+@media only screen and (min-width : 320px) {
+    #chart-area {
+        max-width: 100%;
+    }
+}
+
+@media only screen and (min-width : 960px) {
+    #chart-area {
+        max-width:960px;
+    }
+}
+
 
 .notification {padding-top:10px}
 
@@ -121,24 +135,16 @@ svg text {
     color: $primaryFontColor;
 }
 
-.axis path,
-.axis line {
-    fill: none;
-    stroke: grey;
-    stroke-width: 1;
-    shape-rendering: crispEdges;
-}
-
 .svg-container {
-    display: inline-block;
+    display: block;
     position: relative;
-
     vertical-align: top;
     overflow: hidden;
     background-color: $ocean;
 }
+
 .svg-content-responsive {
-    display: inline-block;
+    display: block;
     position: absolute;
     top: 10px;
     left: 0;
@@ -165,31 +171,4 @@ svg text {
 
 #sub-title {
     font-style: italic;
-}
-
-#gen-button {
-    border: 1px solid $darkGreen;
-    background-color: transparent;
-    color: $darkGreen;
-    margin-top: 10px;
-    margin-left: 10px;
-
-    &:hover {
-        border-color: $lightGreen;
-        background-color: $lightGreen;
-        color: white;
-    }
-}
-
-#reset-button {
-    border: 1px solid $darkRose;
-    background-color: transparent;
-    color: $darkRose;
-    margin-top: 10px;
-
-    &:hover {
-        border-color: $lightRose;
-        background-color: $lightRose;
-        color: white;
-    }
 }

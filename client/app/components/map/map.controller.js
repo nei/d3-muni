@@ -14,7 +14,7 @@
 
         var vm = this;
 
-        var dataset;
+        var dataset = {};
 
         vm.routes = [];
         vm.routesSelected = [];
@@ -37,10 +37,21 @@
             //Hide the tooltip box until graph is drawn
             d3.select('#tooltip').classed('hidden', true);
 
-            $http.get('assets/json/all.json')
+            $http.get('assets/json/all.min.json')
                 .success(function(data) {
-                    dataset = data;
+                    _.extend(dataset, data);
                     picasso.drawBaseMap(dataset);
+                })
+                .error(function(data) {
+                    console.log('API Error: '+data);
+                });
+
+            $http.get('assets/json/streets.min.json')
+                .success(function(data) {
+                    if(_.has(data, 'features')){
+                        dataset.streets = data;
+                        picasso.drawStreets(data);
+                    }
                 })
                 .error(function(data) {
                     console.log('API Error: '+data);
@@ -59,13 +70,13 @@
                         _.extend(vm.routes[d.tag], {color: d.color, selected: false});
                         _.defaults(data[d.tag], {selected: false});
                     });
-                    dataset.routes = data;
-                    dataset.buses = {};
+                    
+                    _.extend(dataset, {routes:data, buses: {}});
                 });
 
             nextbus.getMessages()
                 .then(function(data){
-                    dataset.messages = data;
+                    _.extend(dataset, {messages: data});
                 });
 
             $interval(function() {
