@@ -1,6 +1,6 @@
+/* jshint latedef: false, unused: false */
 
-// NOTE TO SELF
-// $routeProvider templateUrl is relative to the 'index.html' file
+'use strict';
 
 angular
     .module('app')
@@ -20,11 +20,9 @@ function config($routeProvider, $locationProvider, $httpProvider) {
         });
 
     // use the HTML5 History API
-    // also removed the hash from our URL path to clean things up
-    // the require base is new as of angular 1.4.2 (circa July 2015)
     $locationProvider.html5Mode({
         enabled: true,
         requireBase: false
     });
 
-};
+}

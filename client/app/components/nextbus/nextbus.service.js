@@ -2,13 +2,12 @@
   'use strict';
 
   angular.module('app.nextbus')
-    .factory('nextbus', ['$http', '$q', 'xml2json', '$interval', function($http, $q, xml2json, $interval) {
+    .factory('nextbus', ['$http', '$q', 'xml2json', function($http, $q, xml2json) {
 
     	var endpoint = 'http://webservices.nextbus.com/service/publicXMLFeed';
 	    var agency = 'sf-muni';
 	    var busTimer = [];
 	    var routeBuses = [];
-	    var directions = {0:'Inbound',1:'Outbound'};
 
 	    var getRouteList = function () {
 	    	var deferred = $q.defer();
@@ -60,7 +59,9 @@
                 // lets standardize the message structure
                 _.each(routeMessages, function(m){
                     if(m.message.id){
-                        var tags = _.filter(_.pluck(m.message.routeConfiguredForMessage, 'tag'), function(f){ return f !== undefined});
+                        var tags = _.filter(_.pluck(m.message.routeConfiguredForMessage, 'tag'), function(f){ 
+                        		return f !== undefined;
+                        });
                         messages[m.message.id] = {
                             id: m.message.id,
                             class: priorityClasses[m.message.priority],
@@ -135,7 +136,7 @@
 	    };
 
 	    // check the hash of timers and return the routes that needs update
-	    var checkUpdate = function (routes, time) {
+	    var checkUpdate = function (routes) {
 	    	var updates = [];
 	    	var inter = _.intersection(routes, _.keys(busTimer));
 	    	_.each(inter, function(t){
@@ -153,7 +154,7 @@
 
 	    // return the min timer
 	    var getTimers = function (time) {
-	    	var time = time || 20;
+	    	time = time || 20;
 	    	var timers = [];
 	    	_.each(_.keys(busTimer), function(last){
 

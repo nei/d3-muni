@@ -1,6 +1,8 @@
-(function() {
+/* jshint latedef: false */
 
-    'use strict';
+'use strict';
+
+(function() {
 
     angular
         .module('app.map')
@@ -33,15 +35,15 @@
         function activate() {
 
             //Hide the tooltip box until graph is drawn
-            d3.select("#tooltip").classed("hidden", true);
+            d3.select('#tooltip').classed('hidden', true);
 
-            $http.get("/assets/json/all.json")
-                .success(function(data, status, headers, config) {
+            $http.get('/assets/json/all.json')
+                .success(function(data) {
                     dataset = data;
                     picasso.drawBaseMap(dataset);
                 })
                 .error(function(data) {
-                    console.log("API Error");
+                    console.log('API Error: '+data);
                 });
 
             // get the route codes
@@ -79,9 +81,9 @@
                 }
 
             }, 1000);
-        };
+        }
 
-        $scope.$watch('vm.directionSelected', function(newValue, oldValue) {
+        $scope.$watch('vm.directionSelected', function(newValue) {
             if(newValue && dataset){
                 picasso.drawRoutes(dataset, vm.directionSelected);
             }
@@ -103,7 +105,7 @@
                 chooseRoute(tagsToLoad[0]);
             }
 
-            if(newValue.length == 0 && oldValue.length >= 1){
+            if(newValue.length === 0 && oldValue.length >= 1){
                 cleanRoutes();
             }
         });
@@ -115,18 +117,18 @@
                 tags.push(r.tag);
             });
             return tags;
-        };
+        }
 
         function cleanRoutes(){
 
             // keep the atribute selected (bool) updated
-            dataset.routes = _.mapObject(dataset.routes, function(obj, key) {
+            dataset.routes = _.mapObject(dataset.routes, function(obj) {
                 obj.selected = false;
                 return obj;
             });
 
             picasso.drawRoutes(dataset, vm.directionSelected);
-        };
+        }
 
         function chooseRoute(routes) {
 
@@ -141,15 +143,13 @@
 
                     picasso.drawRoutes(dataset, vm.directionSelected);
                 });
-        };
+        }
 
         function hasMessage(){
             return _.keys(vm.messages).length;
-        };
+        }
 
         function updateMessages(){
-            var applyTo;
-            var inter;
             var routes = getRouteTags(vm.routesSelected);
 
             // check which message we are going to display
@@ -173,7 +173,7 @@
                 var msgObj = dataset.messages[id];
 
                 var applyTo;
-                if (msgObj.tags.length == 1 && msgObj.tags[0] == 'All') {
+                if (msgObj.tags.length === 1 && msgObj.tags[0] === 'All') {
                     applyTo = '<span class="badge all">All</span>';
                 } else if (msgObj.tags.length > 1) {
                     applyTo = _.reduce(_.intersection(msgObj.tags, routes), function(memo, tag) {
@@ -187,7 +187,7 @@
                 
                 vm.messages[msgObj.id] = msgObj;
             });
-        };
+        }
 
         function toggleSelection(route) {
             var idx = vm.routesSelected.indexOf(route);
@@ -202,7 +202,7 @@
               vm.routesSelected.push(route);
               vm.routes[route.tag].selected = true;
             }
-        };
-    };
+        }
+    }
 
 })();

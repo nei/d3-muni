@@ -1,5 +1,9 @@
+'use strict';
 
 module.exports = function(grunt) {
+
+    require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
+
     grunt.initConfig({
         // initConfig takes an object
         // in this object, we list all the tasks that we want to run
@@ -21,16 +25,27 @@ module.exports = function(grunt) {
             }
         },
         cssmin: {
-            my_target: {
+            target: {
                 files:[{
                     expand: true,
-                    // establishes the root directory for the 'src' array
                     cwd: 'client/assets/css/',
                     src: ['*.css', '!*.min.css'],
                     dest: 'client/assets/css/',
                     ext: '.min.css'
                 }]
             }
+        },
+        jshint: {
+            options: {
+                jshintrc: '.jshintrc',
+                ignores: 'client/assets'
+            },
+            all: [
+                'Gruntfile.js',
+                'server.js',
+                'client/app/**/*.js',
+                '!**/load-d3.service.js'
+            ]
         },
         sass: {
             dist: {
@@ -45,12 +60,6 @@ module.exports = function(grunt) {
         }
     });
 
-    // here we need to load the plugins that we are using
-    grunt.loadNpmTasks('grunt-contrib-cssmin');
-    grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-sass');
-    grunt.loadNpmTasks('grunt-bower');
-
     // here we say what tasks to complete in the second argument, we pass the tasks from our initConfig func above
-    grunt.registerTask('default', [ 'bower', 'sass', 'cssmin', 'watch']);
-}
+    grunt.registerTask('default', [ 'jshint', 'bower', 'sass', 'cssmin', 'watch']);
+};

@@ -113,14 +113,6 @@ svg text {
   color: #555;
 }
 
-.axis path,
-.axis line {
-  fill: none;
-  stroke: grey;
-  stroke-width: 1;
-  shape-rendering: crispEdges;
-}
-
 .svg-container {
   display: inline-block;
   position: relative;
@@ -144,12 +136,6 @@ svg text {
   margin-bottom: 20px;
 }
 
-#popup-title {
-  font-style: italic;
-  font-weight: 200;
-  font-family: "Helvetica", "Sans-Serif";
-}
-
 #lesser-title {
   font-size: 17px;
   font-weight: 600;
@@ -157,31 +143,6 @@ svg text {
 
 #sub-title {
   font-style: italic;
-}
-
-#gen-button {
-  border: 1px solid #5AA67E;
-  background-color: transparent;
-  color: #5AA67E;
-  margin-top: 10px;
-  margin-left: 10px;
-}
-#gen-button:hover {
-  border-color: #8AE3B5;
-  background-color: #8AE3B5;
-  color: white;
-}
-
-#reset-button {
-  border: 1px solid #B85878;
-  background-color: transparent;
-  color: #B85878;
-  margin-top: 10px;
-}
-#reset-button:hover {
-  border-color: #EB7FA3;
-  background-color: #EB7FA3;
-  color: white;
 }
 
 /*# sourceMappingURL=style.css.map */

@@ -1,5 +1,6 @@
+'use strict';
+
 (function () {
-  'use strict';
 
   angular.module('app.d3')
     .factory('picasso', [function() {
@@ -10,12 +11,12 @@
             sizes: {w: 760, h:600},
             center: [-122.5593367082541, 37.613752052748055],// centroid of neighborhoods
             scale: 259000
-        }
+        };
 
         map.offset = [-150, map.sizes.h / 0.527];
 
-        var tooltip = d3.select("body").append("div")
-            .attr("class", "tooltip");
+        var tooltip = d3.select('body').append('div')
+            .attr('class', 'tooltip');
 
         // projection definition
         var projection = d3.geo.mercator()
@@ -39,25 +40,24 @@
 
 function drawBaseMap(dataset) {
 
+    //jshint validthis:true
     var width = this.map.sizes.w;
     var height = this.map.sizes.h;
     var path = this.path;
-    var centered;
 
     // Adds the svg canvas
-    var canvas = d3.select("#chart-area")
-        .append("div")
-        .classed("svg-container", true)
-        .append("svg")
-            // .attr("preserveAspectRatio", "xMidYMid")
-            // .attr("viewBox", '0 0 ' + Math.max(width, height) + ' ' + Math.min(width, height))
-            // .classed("svg-content-responsive", true)
-            .attr("width", width)
-            .attr("height", height);
+    var canvas = d3.select('#chart-area')
+        .append('div')
+        .classed('svg-container', true)
+        .append('svg')
+            // .attr('preserveAspectRatio', 'xMidYMid')
+            // .attr('viewBox', '0 0 ' + Math.max(width, height) + ' ' + Math.min(width, height))
+            // .classed('svg-content-responsive', true)
+            .attr('width', width)
+            .attr('height', height);
 
     var baseGroup = canvas.append('g').attr('id', 'base');
     
-
     // create a group for each type of element to avoid overlap
     canvas.append('g').attr('id', 'route');
     canvas.append('g').attr('id', 'busstop');
@@ -94,26 +94,25 @@ function drawBaseMap(dataset) {
         .attr('d', path);
 
     baseGroup
-        .selectAll(".neighborhood-label")
+        .selectAll('.neighborhood-label')
         .data(dataset.neighborhoods.features)
-        .enter().append("svg:text")
-        .attr("class", "neighborhood-label")
-        .attr("x", function(d) {
+        .enter().append('svg:text')
+        .attr('class', 'neighborhood-label')
+        .attr('x', function(d) {
             return path.centroid(d)[0];
         })
-        .attr("y", function(d) {
+        .attr('y', function(d) {
             return path.centroid(d)[1];
         })
-        .attr("dy", "0.35em")
+        .attr('dy', '0.35em')
         .text(function(d) {
             return d.properties.neighborho;
         });
-
-        
 }
 
 function drawRoutes(dataset, direction){
 
+    //jshint validthis:true
     var routes = _.where(dataset.routes, {selected: true});
     var path = this.path;
     var projection = this.projection;
@@ -148,20 +147,20 @@ function loadRoutesLine(currentRoute, routeData, path) {
                 paths.push([e.lon, e.lat]);
             });
             var links = [{
-                type: "LineString",
+                type: 'LineString',
                 coordinates: paths
             }];
 
-            canvas.selectAll(".line-" + currentRoute)
+            canvas.selectAll('.line-' + currentRoute)
                 .data(links)
                 .enter()
-                .append("path")
-                .attr("d", path)
+                .append('path')
+                .attr('d', path)
                 .attr('class', 'route-path')
                 .style({
                     'stroke': '#' + routeData.color
                 });
-        })
+        });
     });
 }
 
@@ -169,8 +168,8 @@ function closeTooltip() {
     return d3.select('.tooltip')
         .transition()
         .duration(500)
-        .style("opacity", 0)
-        .attr("class", "tooltip");
+        .style('opacity', 0)
+        .attr('class', 'tooltip');
 }
 
 function showTooltip(html, cssclass) {
@@ -179,14 +178,14 @@ function showTooltip(html, cssclass) {
 
     tooltip.transition()
         .duration(200)
-        .style("opacity", .9);
+        .style('opacity', 0.9);
 
     tooltip.html(html)
-        .style("left", (d3.event.pageX) + "px")
-        .attr("class", function(d){
+        .style('left', (d3.event.pageX) + 'px')
+        .attr('class', function(){
             return 'tooltip '+ cssclass;
         })
-        .style("top", (d3.event.pageY - 28) + "px");
+        .style('top', (d3.event.pageY - 28) + 'px');
 }
 
 function loadBuses(route, jsonBuses, direction, projection) {
@@ -202,12 +201,12 @@ function loadBuses(route, jsonBuses, direction, projection) {
         .data(_.keys(jsonBuses));
 
     // Create new elements as needed.
-    buses.enter().append("circle");
+    buses.enter().append('circle');
 
     var updateCoord = function(b, index) {
         var node = jsonBuses[b];
         return projection([node.lon, node.lat])[index];
-    }
+    };
 
     if (numberOfBusesPlotted === 0) {
         buses.attr('class', 'circle-bus circle-'+route.tag)
@@ -215,15 +214,15 @@ function loadBuses(route, jsonBuses, direction, projection) {
                 return 'bus-' + a;
             })
             .attr('cx', function(d) {
-                return updateCoord(d, 0)
+                return updateCoord(d, 0);
             })
             .attr('cy', function(d) {
-                return updateCoord(d, 1)
+                return updateCoord(d, 1);
             })
             .attr('r', 7)
             .attr('fill', '#'+route.color)
             .attr('stroke', '#'+route.oppositeColor)
-            .on("mouseover", function(busId) {
+            .on('mouseover', function(busId) {
                 var d = jsonBuses[busId];
                 d3.select(this)
                     .transition()
@@ -231,7 +230,7 @@ function loadBuses(route, jsonBuses, direction, projection) {
                     .attr('r', 8);
                 showTooltip('Bus id: ' + busId + '<br/>Route: ' + d.routeTag + '<br/>' + directionTitle + '<br/>Speed: ' + d.speedKmHr + ' Km/h', 'bus');
             })
-            .on("mouseout", function(d) {
+            .on('mouseout', function() {
                 closeTooltip();
                 d3.select(this)
                     .transition()
@@ -248,10 +247,10 @@ function loadBuses(route, jsonBuses, direction, projection) {
             .attr('fill', '#'+route.color)
             .attr('stroke', '#'+route.oppositeColor)
             .attr('cx', function(d) {
-                return updateCoord(d, 0)
+                return updateCoord(d, 0);
             })
             .attr('cy', function(d) {
-                return updateCoord(d, 1)
+                return updateCoord(d, 1);
             })
             .ease('linear');
     }
@@ -287,16 +286,16 @@ function loadBusStops(route, routeDirection, projection){
         .attr('stroke', '#' + route.oppositeColor)
         .attr('class', 'circle-busstop')
         .attr('id', function(d) {
-            return 'stop-' + d.stopId
+            return 'stop-' + d.stopId;
         })
-        .on("mouseover", function(d) {
+        .on('mouseover', function(d) {
             d3.select(this)
                 .transition()
                 .duration(200)
                 .attr('r', 6);
             showTooltip('<label>' + d.title + '</label><br/>' + d.tag + '<br/>' + directionTitle, 'stop');
         })
-        .on("mouseout", function(d) {
+        .on('mouseout', function() {
             closeTooltip();
             d3.select(this)
                 .transition()

@@ -1,7 +1,7 @@
 {
-  "name": "d3-test",
-  "version": "0.0.1",
-  "description": "d3 test",
+  "name": "muni",
+  "version": "1.0.0",
+  "description": "San Francisco's buses and trains visualisation with d3js",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
@@ -11,18 +11,19 @@
     "body-parser": "~1.4.2",
     "morgan": "latest"
   },
-  "author": "Sam Bennett",
-  "license": "SamCo",
+  "author": "Nei Rauni Santos",
+  "license": "ISC",
   "repository": "https://github.com/samuelwill/d3-us-gdp-data.git",
   "devDependencies": {
-    "connect": "^3.4.1",
     "grunt": "^0.4.5",
+    "grunt-cli": "^0.1.13",
     "grunt-bower": "^0.21.0",
     "grunt-contrib-cssmin": "^0.13.0",
-    "grunt-contrib-jshint": "^0.11.2",
+    "grunt-contrib-jshint": "^0.11.3",
     "grunt-contrib-sass": "^0.9.2",
     "grunt-contrib-uglify": "^0.9.1",
     "grunt-contrib-watch": "^0.6.1",
-    "static-server": "^2.0.1"
+    "static-server": "^2.0.1",
+    "matchdep": "^1.0.1"
   }
 }

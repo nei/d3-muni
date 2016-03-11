@@ -1,5 +1,6 @@
+'use strict';
+
 (function () {
-  'use strict';
 
   angular.module('app.d3')
     .factory('d3', [function() {
