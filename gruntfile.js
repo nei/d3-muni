@@ -28,7 +28,7 @@ module.exports = function(grunt) {
                     cwd: 'client/assets/json', 
                     src: ['all.json'], 
                     dest: 'client/assets/json',
-                    ext: '.gz.js'
+                    ext: '.json.gz'
             }]
           }
         },
