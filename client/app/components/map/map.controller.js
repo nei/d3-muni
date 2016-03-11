@@ -37,7 +37,7 @@
             //Hide the tooltip box until graph is drawn
             d3.select('#tooltip').classed('hidden', true);
 
-            $http.get('/assets/json/all.json')
+            $http.get('assets/json/all.json')
                 .success(function(data) {
                     dataset = data;
                     picasso.drawBaseMap(dataset);
