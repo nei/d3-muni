@@ -18,6 +18,20 @@ module.exports = function(grunt) {
                 }
             }
         },
+        compress: {
+          main: {
+            options: {
+                mode: 'gzip'
+            },
+            files: [{
+                expand: true, 
+                cwd: 'client/assets/json', 
+                src: ['all.json'], 
+                dest: 'client/assets/json',
+                ext: '.gz.js'
+            }]
+          }
+        },
         watch: {
             sass: {
                 files: 'client/assets/css/*.scss',
