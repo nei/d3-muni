@@ -5,6 +5,6 @@ D3.js Demo Graphing San Francisco Transport System MUNI
 
 See the DEMO
 
-http://www.herocar.io/muni/
+http://www.herocar.io/d3-muni/
 
 
