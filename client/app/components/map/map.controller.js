@@ -101,6 +101,7 @@
         });
 
         $scope.$watchCollection('vm.routesSelected', function(newValue, oldValue) {
+
             if(vm.routesSelected.length){
 
                 // array to check which tags is selected
@@ -119,6 +120,8 @@
             if(newValue.length === 0 && oldValue.length >= 1){
                 cleanRoutes();
             }
+
+            updateMessages();
         });
 
         function getRouteTags(dataset){
@@ -143,8 +146,6 @@
 
         function chooseRoute(routes) {
 
-            updateMessages();
-
             // get the route codes
             nextbus
                 .getVehicleLocations(routes, vm.directionSelected)
@@ -162,7 +163,8 @@
 
         function updateMessages(){
             var routes = getRouteTags(vm.routesSelected);
-
+            vm.messages = {};
+            
             // check which message we are going to display
             var msgs = [];
             _.each(routes, function(route) {
