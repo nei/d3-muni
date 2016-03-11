@@ -42,8 +42,7 @@
 function drawStreets(streets) {
     //jshint validthis:true
     var path = this.path;
-    d3.select('#base > g.streets')
-        .append('g').attr('id', 'streets')
+    d3.select('#streets')
         .selectAll('.street-path')
         .data(streets.features)
         .enter().append('svg:path')
@@ -72,10 +71,9 @@ function drawBaseMap(dataset) {
     var baseGroup = canvas.append('g')
                         .attr('id', 'base');
 
-    // we want to lazy load streets and render it behind the arteries 
-    baseGroup.append('g').attr('class', 'streets');
     
     // create a group for each type of element to avoid overlap
+    canvas.append('g').attr('id', 'streets');
     canvas.append('g').attr('id', 'route');
     canvas.append('g').attr('id', 'busstop');
     canvas.append('g').attr('id', 'bus');
