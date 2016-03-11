@@ -13,7 +13,7 @@
   },
   "author": "Nei Rauni Santos",
   "license": "ISC",
-  "repository": "https://github.com/samuelwill/d3-us-gdp-data.git",
+  "repository": "https://github.com/nei/d3-muni.git",
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-cli": "^0.1.13",
