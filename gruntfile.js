@@ -19,16 +19,16 @@ module.exports = function(grunt) {
             }
         },
         compress: {
-          main: {
-            options: {
-                mode: 'gzip'
-            },
-            files: [{
-                expand: true, 
-                cwd: 'client/assets/json', 
-                src: ['all.json'], 
-                dest: 'client/assets/json',
-                ext: '.gz.js'
+            main: {
+                options: {
+                    mode: 'gzip'
+                },
+                files: [{
+                    expand: true, 
+                    cwd: 'client/assets/json', 
+                    src: ['all.json'], 
+                    dest: 'client/assets/json',
+                    ext: '.gz.js'
             }]
           }
         },
@@ -75,5 +75,5 @@ module.exports = function(grunt) {
     });
 
     // here we say what tasks to complete in the second argument, we pass the tasks from our initConfig func above
-    grunt.registerTask('default', [ 'jshint', 'bower', 'sass', 'cssmin', 'watch']);
+    grunt.registerTask('default', [ 'compress', 'jshint', 'bower', 'sass', 'cssmin', 'watch']);
 };
