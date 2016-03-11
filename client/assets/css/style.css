@@ -2,6 +2,18 @@
 /*******
 MAP STYLES
 *******/
+body {
+  padding: 10px;
+}
+
+#map-view {
+  max-width: 1024px;
+}
+
+.notification {
+  padding-top: 10px;
+}
+
 .ocean {
   fill: #baddff;
 }
@@ -63,6 +75,13 @@ general
   display: none;
 }
 
+.badge-true {
+  background-color: white !important;
+  font-weight: 300 !important;
+  color: black;
+  border: 1px solid;
+}
+
 div.tooltip {
   position: absolute;
   opacity: 0;
@@ -105,10 +124,6 @@ svg text {
 .svg-container {
   display: inline-block;
   position: relative;
-  width: 100%;
-  padding-bottom: 100%;
-  /* aspect ratio */
-  height: 100%;
   vertical-align: top;
   overflow: hidden;
   background-color: #baddff;

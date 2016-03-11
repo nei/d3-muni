@@ -7,7 +7,7 @@
         // Set dimensions of SVG element
         var map = {
             margin: { top: 30, right: 20, bottom: 50, left: 50 },
-            sizes: {w: 800, h:600},
+            sizes: {w: 760, h:600},
             center: [-122.5593367082541, 37.613752052748055],// centroid of neighborhoods
             scale: 259000
         }
@@ -39,20 +39,21 @@
 
 function drawBaseMap(dataset) {
 
-    var w = this.map.sizes.w;
-    var h = this.map.sizes.h;
+    var width = this.map.sizes.w;
+    var height = this.map.sizes.h;
     var path = this.path;
+    var centered;
 
     // Adds the svg canvas
     var canvas = d3.select("#chart-area")
         .append("div")
         .classed("svg-container", true)
         .append("svg")
-            .attr("preserveAspectRatio", "xMidYMid")
-            .attr("viewBox", '0 0 ' + Math.max(w, h) + ' ' + Math.min(w, h))
-            .classed("svg-content-responsive", true)
-            .attr("width", '100%')
-            .attr("height", '100%');
+            // .attr("preserveAspectRatio", "xMidYMid")
+            // .attr("viewBox", '0 0 ' + Math.max(width, height) + ' ' + Math.min(width, height))
+            // .classed("svg-content-responsive", true)
+            .attr("width", width)
+            .attr("height", height);
 
     var baseGroup = canvas.append('g').attr('id', 'base');
     
@@ -68,7 +69,6 @@ function drawBaseMap(dataset) {
         .enter().append('path')
         .attr('class', 'neighborhood land')
         .attr('d', path);
-
 
     baseGroup
         .append('g').attr('id', 'streets')
@@ -243,7 +243,7 @@ function loadBuses(route, jsonBuses, direction, projection) {
             .transition()
             .duration(1500)
             .delay(function(d, i) {
-                return i * 10;
+                return i * 100;
             })
             .attr('fill', '#'+route.color)
             .attr('stroke', '#'+route.oppositeColor)
@@ -261,7 +261,10 @@ function loadBuses(route, jsonBuses, direction, projection) {
 function loadBusStops(route, routeDirection, projection){
 
     // lets filter just the stops for the current route direction
-    var validStops = _.pluck(route.direction[routeDirection].stop, 'tag');
+    var validStops;
+    if( route.direction[routeDirection].stop ){
+        validStops = _.pluck(route.direction[routeDirection].stop, 'tag');
+    }
     var directionTitle = route.direction[routeDirection].title || '';
     var stopsToDirection = _.filter(route.stop, function(o) {
         return _.contains(validStops, o.tag);

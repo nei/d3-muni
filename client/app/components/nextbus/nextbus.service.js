@@ -40,50 +40,57 @@
 			return deferred.promise;
 	    };
 
-	    var messages = function (callback) {
-	        $.ajax({
+	    var getMessages = function () {
+            var deferred = $q.defer();
+	        $http({
 	            url: endpoint+'?command=messages&a='+agency,
-	            dataType: 'xml',
-	            success: function(response) {
-	                var data = $.xml2json(response);
-	                var routeMessages = (_.isArray(data.route)) ? data.route : [data.route];
-	                var messages = [];
+	            dataType: 'xml'
+            }).then(function successCallback(response) {
+                var data = xml2json(response.data);
 
-	                var priorityClasses = {
-	                    Low: 'bg-info',
-	                    Normal: 'bg-warning',
-	                    High: 'bg-danger'
-	                };
+                var routeMessages = (_.isArray(data.route)) ? data.route : [data.route];
+                var messages = [];
 
-	                // lets standardize the message structure
-	                _.each(routeMessages, function(m){
-	                    if(m.message.id){
-	                        var tags = _.filter(_.pluck(m.message.routeConfiguredForMessage, 'tag'), function(f){ return f !== undefined});
-	                        messages[m.message.id] = {
-	                            id: m.message.id,
-	                            class: priorityClasses[m.message.priority],
-	                            tags: (tags.length > 0) ? tags : ['All'],
-	                            priority: m.message.priority,
-	                            text: m.message.text
-	                        };
-	                    }else{
-	                        _.each(m.message, function(m){
-	                            if(m.id){
-	                                messages[m.id] = {
-	                                    id: m.id,
-	                                    class: priorityClasses[m.priority],
-	                                    tags: [m.tag] || ['All'],
-	                                    priority: m.priority,
-	                                    text: m.text
-	                                };
-	                            }
-	                        });
-	                    }
-	                });
+                var priorityClasses = {
+                    Low: 'bg-info',
+                    Normal: 'bg-warning',
+                    High: 'bg-danger'
+                };
 
-	                callback(null, messages);
-	            }
-	        });
+                // lets standardize the message structure
+                _.each(routeMessages, function(m){
+                    if(m.message.id){
+                        var tags = _.filter(_.pluck(m.message.routeConfiguredForMessage, 'tag'), function(f){ return f !== undefined});
+                        messages[m.message.id] = {
+                            id: m.message.id,
+                            class: priorityClasses[m.message.priority],
+                            tags: (tags.length > 0) ? tags : ['All'],
+                            priority: m.message.priority,
+                            text: m.message.text,
+                            show: false
+                        };
+                    }else{
+                        _.each(m.message, function(m){
+                            if(m.id){
+                                messages[m.id] = {
+                                    id: m.id,
+                                    class: priorityClasses[m.priority],
+                                    tags: [m.tag] || ['All'],
+                                    priority: m.priority,
+                                    text: m.text,
+                                    show: false
+                                };
+                            }
+                        });
+                    }
+                });
+
+                return deferred.resolve(messages);
+
+	        }, function errorCallback(response) {
+                deferred.reject(response);
+            });
+            return deferred.promise;
 	    };
 
 	    var getVehicleLocations = function (route, direction) {
@@ -146,7 +153,7 @@
 
 	    // return the min timer
 	    var getTimers = function (time) {
-	    	var time = time || 15;
+	    	var time = time || 20;
 	    	var timers = [];
 	    	_.each(_.keys(busTimer), function(last){
 
@@ -162,7 +169,7 @@
 	    return {
 	        getRouteList: getRouteList,
 	        getRouteConfig: getRouteConfig,
-	        messages: messages,
+	        getMessages: getMessages,
 	        getVehicleLocations: getVehicleLocations,
 	        checkUpdate: checkUpdate,
 	        getTimers: getTimers
