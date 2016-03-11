@@ -4,7 +4,7 @@
   "description": "d3 test",
   "main": "server.js",
   "scripts": {
-    "start": "node server/server.js"
+    "start": "node server.js"
   },
   "dependencies": {
     "express": "~4.5.1",
@@ -15,12 +15,14 @@
   "license": "SamCo",
   "repository": "https://github.com/samuelwill/d3-us-gdp-data.git",
   "devDependencies": {
+    "connect": "^3.4.1",
     "grunt": "^0.4.5",
     "grunt-bower": "^0.21.0",
     "grunt-contrib-cssmin": "^0.13.0",
     "grunt-contrib-jshint": "^0.11.2",
     "grunt-contrib-sass": "^0.9.2",
     "grunt-contrib-uglify": "^0.9.1",
-    "grunt-contrib-watch": "^0.6.1"
+    "grunt-contrib-watch": "^0.6.1",
+    "static-server": "^2.0.1"
   }
 }
