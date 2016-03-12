@@ -116,7 +116,7 @@ function drawBaseMap(dataset) {
         });
 }
 
-function drawRoutes(dataset, direction){
+function drawRoutes(dataset, dir){
 
     //jshint validthis:true
     var routes = _.where(dataset.routes, {selected: true});
@@ -128,12 +128,15 @@ function drawRoutes(dataset, direction){
     d3.selectAll('#busstop > circle').remove();
 
     _.each(routes, function(route){
+        var direction = route.direction[dir];
+
         loadRoutesLine(route.tag, route, path);
 
         loadBusStops(route, direction, projection);
 
         var buses = _.filter(dataset.buses, {
-            routeTag: route.tag
+            routeTag: route.tag,
+            dirTag: direction.tag
         });
 
         loadBuses(route, buses, direction, projection);
@@ -196,7 +199,7 @@ function showTooltip(html, cssclass) {
 
 function loadBuses(route, jsonBuses, direction, projection) {
 
-    var directionTitle = route.direction[direction].title || '';
+    var directionTitle = direction.title || '';
     
     var numberOfBusesPlotted = d3.select('.g-route-' + route.tag)
         .selectAll('circle.circle-'+route.tag)
@@ -263,14 +266,14 @@ function loadBuses(route, jsonBuses, direction, projection) {
 
 }
 
-function loadBusStops(route, routeDirection, projection){
+function loadBusStops(route, direction, projection){
 
     // lets filter just the stops for the current route direction
     var validStops;
-    if( route.direction[routeDirection].stop ){
-        validStops = _.pluck(route.direction[routeDirection].stop, 'tag');
+    if( direction.stop ){
+        validStops = _.pluck(direction.stop, 'tag');
     }
-    var directionTitle = route.direction[routeDirection].title || '';
+    var directionTitle = direction.title || '';
     var stopsToDirection = _.filter(route.stop, function(o) {
         return _.contains(validStops, o.tag);
     });

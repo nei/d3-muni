@@ -18,7 +18,7 @@
 
         vm.routes = [];
         vm.routesSelected = [];
-        vm.directions = {0:'Inbound', 1:'Outbound'};
+        vm.directions = {0:'Outbound', 1:'Inbound'};
         vm.directionSelected = 0;
         vm.messages = {};
         vm.timer = 15;
@@ -144,15 +144,15 @@
             picasso.drawRoutes(dataset, vm.directionSelected);
         }
 
-        function chooseRoute(routes) {
+        function chooseRoute(route) {
+
+            var direction = dataset.routes[route].direction[vm.directionSelected];
 
             // get the route codes
             nextbus
-                .getVehicleLocations(routes, vm.directionSelected)
+                .getVehicleLocations(route)
                 .then(function(data){
-                    
                     dataset.buses = _.extend(dataset.buses, data);
-
                     picasso.drawRoutes(dataset, vm.directionSelected);
                 });
         }

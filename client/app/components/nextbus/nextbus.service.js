@@ -98,7 +98,6 @@
 	    	var deferred = $q.defer();
 
 	        var t = (busTimer[route]) ? busTimer[route] : 0;
-	        var dir = ( direction === 0 )?'I':'O';
 	        if(!routeBuses[route]){
 	            routeBuses[route] = {};
 	        }
@@ -118,16 +117,9 @@
                     }
                 });
 
-                // lets plot just the buses that are on the right direction
-                var re = /[_]+(.)_.*/;
-                var filteredBuses = _.filter(routeBuses[route], function(b){
-                    var testDir = re.exec(b.dirTag);
-                    return (testDir !== null && testDir[1] === dir);
-                });
+                routeBuses[route] = _.indexBy(routeBuses[route], 'id');
 
-                filteredBuses = _.indexBy(filteredBuses, 'id');
-
-                return deferred.resolve(filteredBuses);
+                return deferred.resolve(routeBuses[route]);
             }, function errorCallback(response) {
 			    deferred.reject(response);
 			});
